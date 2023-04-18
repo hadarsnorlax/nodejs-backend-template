@@ -1,5 +1,6 @@
 const config = require('config');
 const MongoInterface = require('utils/db');
+const bookSchema = require('src/api/models/book-schema');
 
 class BooksMongo extends MongoInterface {
   constructor() {
@@ -17,6 +18,11 @@ class BooksMongo extends MongoInterface {
   }
 
   async insertBook(book) {
+    const validation = bookSchema.validate(book);
+    if (validation.error) {
+      throw Error(`Book validation failed: ${validation.error.details}`);
+    }
+
     try {
       await this.books.insertOne(book);
     } catch (err) {

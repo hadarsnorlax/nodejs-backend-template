@@ -1,5 +1,6 @@
 const config = require('config');
 const MongoInterface = require('utils/db');
+const userSchema = require('src/api/models/user-schema');
 
 class UsersMongo extends MongoInterface {
   constructor() {
@@ -17,6 +18,11 @@ class UsersMongo extends MongoInterface {
   }
 
   async insertUser(user) {
+    const validation = userSchema.validate(user);
+    if (validation.error) {
+      throw Error(`User validation failed: ${validation.error.details}`);
+    }
+
     try {
       await this.users.insertOne(user);
     } catch (err) {
