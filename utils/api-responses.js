@@ -39,6 +39,10 @@ class ApiResponse {
     );
   }
 
+  static notFound(message) {
+    return new ApiResponse(statusCodes.NOT_FOUND, getErrorMsg(message));
+  }
+
   static invalidPathError() {
     return new ApiResponse(statusCodes.NOT_FOUND, getErrorMsg('Invalid Path'));
   }
